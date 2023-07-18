@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 const { connection } = require("./Database/db");
 const { router } = require("./Routes/AllRoutes");
 
@@ -13,7 +14,7 @@ const dbConnect = async () => {
   await connection;
 };
 dbConnect().then(() => {
-  app.listen(8080, (req, res) => {
+  app.listen(`${process.env.PORT}`, (req, res) => {
     console.log("Server is Running");
   });
 });

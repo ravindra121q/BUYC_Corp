@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const { OEMModel } = require("../Models/oemModel");
 const { dealerModel } = require("../Models/dealerModel");
 const router = express.Router();
@@ -110,7 +111,10 @@ router.post("/dealer/car", authMiddleware, async (req, res) => {
 });
 
 router.get("/dealer/getCar", authMiddleware, async (req, res) => {
-  const decoded = jwt.verify(req.headers.authorization?.split(" ")[1], "masai");
+  const decoded = jwt.verify(
+    req.headers.authorization?.split(" ")[1],
+    `${process.env.secretKey}`
+  );
   if (decoded) {
     const user = await Marketplace_InventoryModel.find({
       userId: decoded.user_id,
