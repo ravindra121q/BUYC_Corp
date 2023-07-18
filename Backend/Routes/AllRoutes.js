@@ -64,6 +64,7 @@ router.get("/oem", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 router.post("/dealer/car", authMiddleware, async (req, res) => {
   const {
     car_image,
@@ -76,7 +77,8 @@ router.post("/dealer/car", authMiddleware, async (req, res) => {
   } = req.body;
 
   const car_exists = await Marketplace_InventoryModel.findOne({
-    registration_number: registration_number,
+    registration_number,
+    car_image,
   });
 
   if (car_exists) {
@@ -96,13 +98,26 @@ router.post("/dealer/car", authMiddleware, async (req, res) => {
           num_accidents_reported,
           num_previous_buyers,
           registration_number,
+          userId: decoded.user_id,
         });
         await newCar.save();
         return res.json({ msg: "Car Added to the Inventory" });
       }
     } catch (error) {
-      res.status(401).json({ msg: "Invalid token" });
+      return res.status(401).json({ msg: "Invalid token" });
     }
+  }
+});
+
+router.get("/dealer/getCar", authMiddleware, async (req, res) => {
+  const decoded = jwt.verify(req.headers.authorization?.split(" ")[1], "masai");
+  if (decoded) {
+    const user = await Marketplace_InventoryModel.find({
+      userId: decoded.user_id,
+    });
+    res.json({ user });
+  } else {
+    res.json({ msg: "Please Login Again" });
   }
 });
 
