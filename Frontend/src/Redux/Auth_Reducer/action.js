@@ -39,7 +39,7 @@ export const addNewCar = (obj) => (dispatch) => {
   console.log(newToken);
 
   axios
-    .post("http://localhost:8080/dealer/car", obj, {
+    .post("https://silly-deer-slacks.cyclic.app/dealer/car", obj, {
       headers: { Authorization: `Bearer ${newToken}` },
     })
     .then((res) => console.log(res))

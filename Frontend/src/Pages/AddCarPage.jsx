@@ -37,15 +37,15 @@ export const AddCarPage = () => {
       num_previous_buyers,
       major_scratches,
       car_price,
-      car_color, // Add car_price and car_color to the destructuring
+      car_color,
     } = formData;
 
     if (
       car_image === "" ||
       kms_on_odometer === "" ||
       registration_number === "" ||
-      car_price === "" || // Check if car_price is empty
-      car_color === "" // Check if car_color is empty
+      car_price === "" ||
+      car_color === "" 
     ) {
       return alert("Please Fill All the Details");
     }

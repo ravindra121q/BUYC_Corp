@@ -3,7 +3,7 @@ import "../CSS/loginpage.css";
 import { useDispatch } from "react-redux";
 import { createUser, getAuth } from "../Redux/Auth_Reducer/action";
 import { Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
-import { AUTH_REQUEST_SUCCESS } from "../Redux/Auth_Reducer/actionTypes";
+
 import { useLocation, useNavigate } from "react-router-dom";
 export const LoginPage = () => {
   const dispatch = useDispatch();

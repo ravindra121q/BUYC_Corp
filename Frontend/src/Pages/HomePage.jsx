@@ -24,7 +24,9 @@ const HomePage = () => {
     try {
       console.log(searchTerm);
       const response = await fetch(
-        `http://localhost:8080/oem?model_name=${encodeURIComponent(searchTerm)}`
+        `https://silly-deer-slacks.cyclic.app/oem?model_name=${encodeURIComponent(
+          searchTerm
+        )}`
       );
       if (response.ok) {
         const searchData = await response.json();
