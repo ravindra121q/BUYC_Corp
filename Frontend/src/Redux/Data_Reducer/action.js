@@ -9,7 +9,7 @@ export const getData = () => (dispatch) => {
   try {
     dispatch({ type: GET_DATA_REQUEST });
     axios.get("https://silly-deer-slacks.cyclic.app/oem").then((res) => {
-      console.log(res.data);
+      
       dispatch({ type: GET_DATA_SUCCESS, payload: res.data });
     });
   } catch (error) {

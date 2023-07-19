@@ -28,7 +28,7 @@ export const UpdateCar = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateCarHandler({formData, id}));
-    console.log(formData, id);
+   
 
     setFormData({
       car_model: "",

@@ -8,7 +8,7 @@ import { getData } from "../Data_Reducer/action";
 
 export const getAuth = (obj) => (dispatch) => {
   dispatch({ type: AUTH_REQUEST_PENDING });
-  console.log(obj);
+  
   return axios
     .post("https://silly-deer-slacks.cyclic.app/login", obj)
     .then((res) => {
@@ -32,17 +32,17 @@ export const createUser = (obj) => (dispatch) => {
 };
 
 export const addNewCar = (obj) => (dispatch) => {
-  console.log(obj);
+  
   const token = localStorage.getItem("token");
   const newToken = token.replace(/"/g, "").trim();
 
-  console.log(newToken);
+
 
   axios
     .post("https://silly-deer-slacks.cyclic.app/dealer/car", obj, {
       headers: { Authorization: `Bearer ${newToken}` },
     })
-    .then((res) => console.log(res))
+    .then((res) => {})
     .catch((error) => console.log(error));
 };
 

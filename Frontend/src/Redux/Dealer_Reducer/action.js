@@ -12,7 +12,7 @@ export const getDealerData =
       dispatch({ type: GET_DEALER_DATA_REQUEST });
       const token = localStorage.getItem("token");
       const newToken = token.replace(/"/g, "");
-      console.log(newToken);
+    
 
       let queryParams = `?selectedPriceRange=${selectedPriceRange}&selectedColor=${selectedColor}&selectedMileage=${selectedMileage}`;
 
@@ -24,8 +24,8 @@ export const getDealerData =
           }
         )
         .then((res) => {
-          console.log("working");
-          console.log(res.data.user);
+          
+         
           dispatch({ type: GET_DEALER_DATA_SUCCESS, payload: res.data.user });
         })
         .catch((error) => {
