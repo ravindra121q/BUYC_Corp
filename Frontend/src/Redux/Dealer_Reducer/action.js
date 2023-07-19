@@ -18,7 +18,7 @@ export const getDealerData =
 
       axios
         .get(
-          `http://localhost:8080/dealer/getCar/${queryParams}`,
+          `https://silly-deer-slacks.cyclic.app/dealer/getCar/${queryParams}`,
           {
             headers: { Authorization: `Bearer ${newToken}` },
           }
@@ -37,7 +37,7 @@ export const getDealerData =
   };
 
 export const deleteCard = (id) => (dispatch) => {
-  console.log(id);
+  
   const token = localStorage.getItem("token");
   const newToken = token.replace(/"/g, "").trim();
 
