@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const Marketplace_InventorySchema = {
+  car_model: String,
   car_image: String,
   kms_on_odometer: Number,
   major_scratches: Boolean,

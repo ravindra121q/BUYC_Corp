@@ -92,6 +92,7 @@ router.post("/dealer/car", authMiddleware, async (req, res) => {
       );
       if (decoded) {
         const newCar = new Marketplace_InventoryModel({
+          car_model,
           car_image,
           kms_on_odometer,
           major_scratches,
@@ -122,6 +123,56 @@ router.get("/dealer/getCar", authMiddleware, async (req, res) => {
     res.json({ user });
   } else {
     res.json({ msg: "Please Login Again" });
+  }
+});
+
+router.delete("/dealer/car/:id", authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const carExists = await Marketplace_InventoryModel.findById(id);
+    if (carExists) {
+      await Marketplace_InventoryModel.findByIdAndDelete(id);
+      res.status(200).json({ message: "Car deleted successfully." });
+    } else {
+      res.status(404).json({ message: "Car not found." });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+router.put("/dealer/car/:id", authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const {
+    car_image,
+    kms_on_odometer,
+    major_scratches,
+    original_paint,
+    num_accidents_reported,
+    num_previous_buyers,
+    registration_number,
+  } = req.body;
+
+  try {
+    const carExists = await Marketplace_InventoryModel.findById(id);
+    if (carExists) {
+      const updatedCar = {
+        car_image,
+        kms_on_odometer,
+        major_scratches,
+        original_paint,
+        num_accidents_reported,
+        num_previous_buyers,
+        registration_number,
+      };
+
+      await Marketplace_InventoryModel.findByIdAndUpdate(id, updatedCar);
+      res.status(200).json({ message: "Car updated successfully." });
+    } else {
+      res.status(404).json({ message: "Car not found." });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
