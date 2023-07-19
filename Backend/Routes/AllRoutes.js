@@ -58,13 +58,21 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/oem", async (req, res) => {
+  const { model_name } = req.query;
+  const query = {};
+
+  if (model_name) {
+    query.model_name = { $regex: model_name, $options: "i" };
+  }
+
   try {
-    const data = await OEMModel.find();
+    const data = await OEMModel.find(query);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 router.post("/dealer/car", authMiddleware, async (req, res) => {
   const {
     car_model,
