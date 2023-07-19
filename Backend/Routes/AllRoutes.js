@@ -65,9 +65,11 @@ router.get("/oem", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 router.post("/dealer/car", authMiddleware, async (req, res) => {
   const {
+    car_model,
+    car_color,
+    car_price,
     car_image,
     kms_on_odometer,
     major_scratches,
@@ -77,22 +79,24 @@ router.post("/dealer/car", authMiddleware, async (req, res) => {
     registration_number,
   } = req.body;
 
-  const car_exists = await Marketplace_InventoryModel.findOne({
-    registration_number,
-    car_image,
-  });
+  try {
+    const decoded = jwt.verify(
+      req.headers.authorization?.split(" ")[1],
+      "masai"
+    );
+    if (decoded) {
+      const carExists = await Marketplace_InventoryModel.findOne({
+        registration_number,
+        car_image,
+      });
 
-  if (car_exists) {
-    return res.json({ msg: "Car Already Added to the Inventory" });
-  } else {
-    try {
-      const decoded = jwt.verify(
-        req.headers.authorization?.split(" ")[1],
-        "masai"
-      );
-      if (decoded) {
+      if (carExists) {
+        return res.json({ msg: "Car Already Added to the Inventory" });
+      } else {
         const newCar = new Marketplace_InventoryModel({
           car_model,
+          car_price,
+          car_color,
           car_image,
           kms_on_odometer,
           major_scratches,
@@ -102,12 +106,13 @@ router.post("/dealer/car", authMiddleware, async (req, res) => {
           registration_number,
           userId: decoded.user_id,
         });
+
         await newCar.save();
         return res.json({ msg: "Car Added to the Inventory" });
       }
-    } catch (error) {
-      return res.status(401).json({ msg: "Invalid token" });
     }
+  } catch (error) {
+    return res.status(401).json({ msg: "Invalid token" });
   }
 });
 
@@ -116,13 +121,37 @@ router.get("/dealer/getCar", authMiddleware, async (req, res) => {
     req.headers.authorization?.split(" ")[1],
     `${process.env.secretKey}`
   );
-  if (decoded) {
-    const user = await Marketplace_InventoryModel.find({
-      userId: decoded.user_id,
-    });
+
+  if (!decoded) {
+    return res.status(401).json({ msg: "Please Login Again" });
+  }
+
+  const { selectedPriceRange, selectedColor, selectedMileage } = req.query;
+  const query = { userId: decoded.user_id };
+
+  if (selectedPriceRange === "low to high") {
+    query.car_price = { $lte: 10000 };
+  } else if (selectedPriceRange === "high to low") {
+    query.car_price = { $gt: 10000 };
+  }
+
+  if (selectedColor !== "all") {
+    query.car_color = selectedColor;
+  }
+
+  if (selectedMileage === "low") {
+    query.kms_on_odometer = { $lte: 50000 };
+  } else if (selectedMileage === "medium") {
+    query.kms_on_odometer = { $gt: 50000, $lte: 100000 };
+  } else if (selectedMileage === "high") {
+    query.kms_on_odometer = { $gt: 100000 };
+  }
+
+  try {
+    const user = await Marketplace_InventoryModel.find(query);
     res.json({ user });
-  } else {
-    res.json({ msg: "Please Login Again" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -176,4 +205,30 @@ router.put("/dealer/car/:id", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/inventory", async (req, res) => {
+  try {
+    const { sortBy, filterBy } = req.query;
+
+    const query = {};
+    if (filterBy) {
+      Object.assign(query, filterBy);
+    }
+
+    let sortQuery = {};
+    if (sortBy) {
+      // Assuming sortBy is an object containing sorting criteria
+      // For example, { car_price: 1 } for ascending order or { car_price: -1 } for descending order
+      sortQuery = sortBy;
+    }
+
+    // Fetch the inventory data with sorting and filtering
+    const inventoryData = await Marketplace_InventoryModel.find(query).sort(
+      sortQuery
+    );
+
+    res.json(inventoryData);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 module.exports = { router };
