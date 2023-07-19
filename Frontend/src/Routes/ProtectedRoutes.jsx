@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 export const ProtectedRoutes = ({ children }) => {
   const isAuth = true;
   const navigate = useNavigate();
+  const location = useLocation();
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    if (!isAuth) {
-      return navigate("/login");
+    if (!token) {
+      navigate("/login", { state: location.pathname });
     }
-  });
-  return <div>ProtectedRoutes</div>;
+  }, [navigate, token, location.pathname]);
+
+  return isAuth ? children : <Navigate to="/login" state={location.pathname} />;
 };

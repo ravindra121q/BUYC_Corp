@@ -8,7 +8,7 @@ import {
 export const getData = () => (dispatch) => {
   try {
     dispatch({ type: GET_DATA_REQUEST });
-    axios.get("http://localhost:8080/oem").then((res) => {
+    axios.get("https://silly-deer-slacks.cyclic.app/oem").then((res) => {
       console.log(res.data);
       dispatch({ type: GET_DATA_SUCCESS, payload: res.data });
     });

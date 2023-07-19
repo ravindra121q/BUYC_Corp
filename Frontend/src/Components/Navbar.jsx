@@ -1,7 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+    return;
+  };
   return (
     <div
       style={{
@@ -26,13 +33,18 @@ export const Navbar = () => {
         }}
       >
         <Link to={"/"}>Home</Link>
-        <Link>Old Cars</Link>
-        <Link>Dealer Page</Link>
-        <Link>Add Cars</Link>
-        {/* <Link to={"/login"}>Login Page</Link> */}
+
+        <Link to={"/dealer"}>Dealer Page</Link>
+        <Link to={"/addCar"}>Add Cars</Link>
       </div>
       <div>
-        <button>Login</button>
+        {!token ? (
+          <Link to={"/login"}>
+            <button>Login</button>{" "}
+          </Link>
+        ) : (
+          <button onClick={logoutHandler}>Logout</button>
+        )}
       </div>
     </div>
   );

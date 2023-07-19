@@ -1,29 +1,41 @@
 import React, { useState } from "react";
 import "../CSS/loginpage.css";
 import { useDispatch } from "react-redux";
-import { getAuth } from "../Redux/Auth_Reducer/action";
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-} from "@chakra-ui/react";
+import { createUser, getAuth } from "../Redux/Auth_Reducer/action";
+import { Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { AUTH_REQUEST_SUCCESS } from "../Redux/Auth_Reducer/actionTypes";
+import { useLocation, useNavigate } from "react-router-dom";
 export const LoginPage = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [alert, setAlert] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
   const submitHandler = (e) => {
-    if (email == "" || password == "") {
+    if (email === "" || password === "") {
       return setAlert(true);
     }
     setAlert(false);
     e.preventDefault();
-    const obj = { email, password };
-    console.log(obj);
-    dispatch(getAuth(obj));
+
+    if (isLogin) {
+      const obj = { email, password };
+      dispatch(getAuth(obj)).then(() => navigate(location.state));
+      navigate("/");
+    } else {
+      if (!name) {
+        return setAlert(true);
+      }
+      setAlert(false);
+      const obj = { name, email, password };
+      dispatch(createUser(obj));
+      setTimeout(() => {
+        setIsLogin(true);
+      }, 1000);
+    }
   };
   return (
     <div>
@@ -42,7 +54,7 @@ export const LoginPage = () => {
         style={{ display: "grid", placeItems: "center", marginBottom: "1rem" }}
       >
         <form className="form" onSubmit={submitHandler}>
-          <p id="heading">Login</p>
+          {!isLogin ? <p id="heading">SignUp</p> : <p id="heading">Login</p>}
           {!isLogin && (
             <div className="field">
               <svg
@@ -82,7 +94,7 @@ export const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input-field"
-              type="email"
+              type="text"
             />
           </div>
           <div className="field">
