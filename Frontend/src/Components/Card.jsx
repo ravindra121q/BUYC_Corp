@@ -12,11 +12,11 @@ export const Card1 = ({
     <div
       style={{
         borderRadius: "8px",
-        border: "1px solid black ",
+        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
         overflow: "hidden",
         padding: "0.3em",
         width: "60%",
-        height: "90%",
+        height: "100%",
       }}
     >
       <div>

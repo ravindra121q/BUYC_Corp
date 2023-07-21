@@ -24,7 +24,13 @@ export const Navbar = () => {
         alignItems: "center",
       }}
     >
-      <div>Buy Cars</div>
+      <div>
+        <img
+          style={{ height: "20px", width: "120px" }}
+          src={require("../CSS/logo.jpeg")}
+          alt="logo"
+        />
+      </div>
       <div
         style={{
           display: "flex",
