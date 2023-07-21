@@ -27,7 +27,7 @@ export const Navbar = () => {
       <div>
         <img
           style={{ height: "20px", width: "120px" }}
-          src={require("../CSS/logo.jpeg")}
+          src={"https://i.ibb.co/RS96XpL/logo.jpg"}
           alt="logo"
         />
       </div>
