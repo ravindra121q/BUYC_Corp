@@ -213,6 +213,16 @@ router.put("/dealer/car/:id", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/dealer/car/update/:id", authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const carExists = await Marketplace_InventoryModel.findById(id);
+    res.json(carExists);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 router.get("/inventory", async (req, res) => {
   try {
     const { sortBy, filterBy } = req.query;
@@ -224,12 +234,8 @@ router.get("/inventory", async (req, res) => {
 
     let sortQuery = {};
     if (sortBy) {
-      // Assuming sortBy is an object containing sorting criteria
-      // For example, { car_price: 1 } for ascending order or { car_price: -1 } for descending order
       sortQuery = sortBy;
     }
-
-    // Fetch the inventory data with sorting and filtering
     const inventoryData = await Marketplace_InventoryModel.find(query).sort(
       sortQuery
     );
