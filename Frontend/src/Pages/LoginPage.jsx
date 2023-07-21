@@ -23,8 +23,13 @@ export const LoginPage = () => {
 
     if (isLogin) {
       const obj = { email, password };
-      dispatch(getAuth(obj)).then(() => navigate(location.state));
-      navigate("/");
+      dispatch(getAuth(obj)).then(() => {
+        if (location.state === null) {
+          navigate("/");
+        } else {
+          navigate(location.state);
+        }
+      });
     } else {
       if (!name) {
         return setAlert(true);

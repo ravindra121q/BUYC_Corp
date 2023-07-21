@@ -19,6 +19,9 @@ export const OldCarsPage = () => {
 
   const deleteHandler = (id) => {
     dispatch(deleteCard(id));
+    setTimeout(() => {
+      alert("Car Deleted Successfully");
+    }, 1000);
   };
 
   const updateHandler = (id) => {
@@ -67,10 +70,18 @@ export const OldCarsPage = () => {
   return (
     <div>
       <h2 style={{ textDecoration: "underline" }}>Dealer's Car Page</h2>
-      <h3>Filter</h3>
-      <div style={{ display: "flex", justifyContent: "center", gap: "1em" }}>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "2.5em",
+          lineHeight: "0.1em",
+        }}
+      >
         <div>
-          <h3> By Price</h3>
+          <h4>Filter</h4>
+          <h4> By Price</h4>
           <select value={selectedPriceRange} onChange={handlePriceFilterChange}>
             <option value="all">All</option>
             <option value="low to high">Less then 10000</option>
@@ -78,7 +89,9 @@ export const OldCarsPage = () => {
           </select>
         </div>
         <div>
-          <h3>By Color</h3>
+          {" "}
+          <h4>Filter</h4>
+          <h4>By Color</h4>
           <select value={selectedColor} onChange={handleColorFilterChange}>
             <option value="all">All</option>
             <option value="red">Red</option>
@@ -86,7 +99,9 @@ export const OldCarsPage = () => {
           </select>
         </div>
         <div>
-          <h3>By Mileage</h3>
+          {" "}
+          <h4>Filter</h4>
+          <h4>By Mileage</h4>
           <select value={selectedMileage} onChange={handleMileageFilterChange}>
             <option value="all">All</option>
             <option value="low">Low</option>
@@ -95,7 +110,6 @@ export const OldCarsPage = () => {
           </select>
         </div>
       </div>
-      <hr />
       <div>
         {isLoading ? (
           <h3>...Loading</h3>
@@ -103,11 +117,14 @@ export const OldCarsPage = () => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
-              marginTop: "3em",
-              padding: "1em",
+              gridTemplateColumns: "repeat(4,1fr)",
+              padding: "0.5em",
               justifyContent: "space-between",
               gap: "2em",
+              height: "auto",
+              width: "85%",
+              margin: "auto",
+              marginTop: "3em",
             }}
             mt={5}
           >
@@ -127,39 +144,56 @@ export const OldCarsPage = () => {
                   registration_number,
                 } = car;
                 return (
-                  <div key={_id}>
+                  <div
+                    key={_id}
+                    style={{
+                      boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px",
+
+                      margin: "auto",
+                      borderRadius: "8px",
+                      width: "16em",
+                      paddingBottom: "0.3em",
+                      lineHeight: "0.5em",
+                    }}
+                  >
+                    <img
+                      style={{
+                        width: "100%",
+
+                        borderRadius: "8px",
+                      }}
+                      src={car_image}
+                      alt={car_model}
+                    />
+                    <h3>{car_model}</h3>
+                    <h4>{registration_number}</h4>
+                    <p>{"Kms :" + kms_on_odometer}</p>
+                    <p>{"Major Scratches: " + major_scratches}</p>
+                    <p>
+                      {"Original Paint: " + (original_paint ? "YES" : "NO")}
+                    </p>
+                    <p>{"Price: " + car_price}</p>
+                    <p>{"color: " + car_color}</p>
                     <div
                       style={{
-                        border: "1px solid black",
-                        borderRadius: "8px",
-                        padding: "0.5em",
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "1em",
                       }}
                     >
-                      <img src={car_image} alt={car_model} />
-                      <h3>{car_model}</h3>
-                      <h4>{registration_number}</h4>
-                      <p>{"Kms :" + kms_on_odometer}</p>
-                      <p>{"Major Scratches: " + major_scratches}</p>
-                      <p>
-                        {"Original Paint: " + (original_paint ? "YES" : "NO")}
-                      </p>
-                      <p>{"Price: " + car_price}</p>
-                      <p>{"color: " + car_color}</p>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          gap: "1em",
-                        }}
+                      <input type="checkbox" />
+                      <button
+                        style={{ borderRadius: "8px" }}
+                        onClick={() => deleteHandler(_id)}
                       >
-                        <input type="checkbox" />
-                        <button onClick={() => deleteHandler(_id)}>
-                          Delete
-                        </button>
-                        <button onClick={() => updateHandler(_id)}>
-                          Update
-                        </button>
-                      </div>
+                        Delete
+                      </button>
+                      <button
+                        style={{ borderRadius: "8px" }}
+                        onClick={() => updateHandler(_id)}
+                      >
+                        Update
+                      </button>
                     </div>
                   </div>
                 );

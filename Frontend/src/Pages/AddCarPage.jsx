@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addNewCar } from "../Redux/Auth_Reducer/action";
-
+import { useNavigate } from "react-router-dom";
+import "../CSS/addcarpage.css";
 export const AddCarPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     car_model: "",
     car_image: "",
@@ -45,7 +47,7 @@ export const AddCarPage = () => {
       kms_on_odometer === "" ||
       registration_number === "" ||
       car_price === "" ||
-      car_color === "" 
+      car_color === ""
     ) {
       return alert("Please Fill All the Details");
     }
@@ -63,6 +65,8 @@ export const AddCarPage = () => {
     };
 
     dispatch(addNewCar(obj));
+    alert("Car Added Successfully");
+    navigate("/dealer");
 
     setFormData({
       car_image: "",
@@ -75,6 +79,7 @@ export const AddCarPage = () => {
       car_price: "",
       car_color: "",
     });
+    return;
   };
 
   return (
@@ -82,7 +87,7 @@ export const AddCarPage = () => {
       <h3>Add Car Details</h3>
       <div
         style={{
-          border: "1px solid black",
+          boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
           width: "40%",
           padding: "1em",
           borderRadius: "8px",
@@ -93,21 +98,13 @@ export const AddCarPage = () => {
           padding: "1em",
         }}
       >
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1em",
-            width: "100%",
-            margin: "auto",
-          }}
-        >
+        <form onSubmit={handleSubmit} style={{ padding: "1em" }}>
           <div>
             <label style={{ marginRight: "3em" }} htmlFor="car_model">
               Car Model:
             </label>
             <input
+              style={{ marginLeft: "6em" }}
               type="text"
               id="car_model"
               value={formData.car_model}
@@ -118,6 +115,7 @@ export const AddCarPage = () => {
           <div>
             <label htmlFor="car_price">Car Price:</label>
             <input
+              style={{ marginLeft: "10.5em" }}
               type="Number"
               id="car_price"
               value={formData.car_price}
@@ -128,6 +126,7 @@ export const AddCarPage = () => {
           <div>
             <label htmlFor="car_color">Car Color:</label>
             <input
+              style={{ marginLeft: "10.2em" }}
               type="text"
               id="car_color"
               value={formData.car_color}
@@ -140,6 +139,7 @@ export const AddCarPage = () => {
               Car Image URL:
             </label>
             <input
+              style={{ marginLeft: "6.1em" }}
               type="text"
               id="car_image"
               value={formData.car_image}
@@ -152,6 +152,7 @@ export const AddCarPage = () => {
               KMs on Odometer:
             </label>
             <input
+              style={{ marginLeft: "4.2em" }}
               type="number"
               id="kms_on_odometer"
               value={formData.kms_on_odometer}
@@ -161,7 +162,7 @@ export const AddCarPage = () => {
             <div>
               <label htmlFor="major_scratches">Major Scratches:</label>
               <input
-                style={{ marginRight: "3em" }}
+                style={{ marginLeft: "4.8em" }}
                 type="checkbox"
                 id="major_scratches"
                 checked={formData.major_scratches}
@@ -174,6 +175,7 @@ export const AddCarPage = () => {
             <label htmlFor="original_paint">Original Paint:</label>
             <input
               type="checkbox"
+              style={{ marginLeft: "6.1em" }}
               id="original_paint"
               checked={formData.original_paint}
               name="original_paint"
@@ -189,6 +191,7 @@ export const AddCarPage = () => {
             </label>
             <input
               type="number"
+              style={{ marginLeft: "5.4em" }}
               id="num_accidents_reported"
               value={formData.num_accidents_reported}
               name="num_accidents_reported"
@@ -200,6 +203,7 @@ export const AddCarPage = () => {
               Number of Previous Buyers:
             </label>
             <input
+              style={{ marginLeft: "1em" }}
               type="number"
               id="num_previous_buyers"
               value={formData.num_previous_buyers}
@@ -210,6 +214,7 @@ export const AddCarPage = () => {
           <div>
             <label htmlFor="registration_number">Registration Number:</label>
             <input
+              style={{ marginLeft: "4.4em" }}
               type="text"
               id="registration_number"
               value={formData.registration_number}
@@ -217,8 +222,23 @@ export const AddCarPage = () => {
               onChange={handleChange}
             />
           </div>
-
-          <input type="submit" value="Add Car" />
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "1.3em",
+            }}
+          >
+            <input
+              style={{
+                width: "40%",
+                height: "2em",
+                borderRadius: "5px",
+                margin: "auto",
+              }}
+              type="submit"
+              value="Add Car"
+            />
+          </div>
         </form>
       </div>
     </div>
